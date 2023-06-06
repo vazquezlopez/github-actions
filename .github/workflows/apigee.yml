@@ -49,5 +49,5 @@ jobs:
         id: upload
         run: "echo \"apigee-revision=$(curl --fail -X POST -H \"Content-Type: multipart/form-data\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" -F \"file=@proxy.zip\" \"https://apigee.googleapis.com/v1/organizations/${{secrets.APIGEE_ORG}}/apis?action=import&name=hello-world\" --silent | jq --raw-output .revision)\" >> $GITHUB_OUTPUT"
       - name: Deploy Revision
-        run: "curl \"https://apigee.googleapis.com/v1/organizations/${{ secrets.APIGEE_ORG }}/environments/eval/apis/hello-world/revisions/${{steps.upload.outputs.apigee-revision}}/deployments?override=true\" -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
+        run: "curl \"https://apigee.googleapis.com/v1/organizations/${{ secrets.APIGEE_ORG }}/environments/tf-environment/apis/airports-cicd/revisions/${{steps.upload.outputs.apigee-revision}}/deployments?override=true\" -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
 
