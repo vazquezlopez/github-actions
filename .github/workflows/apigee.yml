@@ -42,7 +42,7 @@ jobs:
         run: zip -r proxy.zip apiproxy
       - name: Set output
         id: val
-        run: echo "output" >> $GITHUB_OUTPUT
+        run: echo "output=${{secrets.APIGEE_ENV}}" >> $GITHUB_OUTPUT
       - name: Print my output
         run: echo ${{steps.val.outputs.name}}
       - name: Upload API Proxy Bundle
