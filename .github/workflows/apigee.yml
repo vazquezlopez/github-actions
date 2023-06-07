@@ -42,12 +42,12 @@ jobs:
         run: zip -r proxy.zip apiproxy
       - name: Set output
         id: val
-        run: echo "output=$APIGEE_ENV" >> $GITHUB_OUTPUT
+        run: echo "output=${{env.APIGEE_ENV}}" >> $GITHUB_OUTPUT
       - name: Print my output
         run: echo ${{steps.val.outputs.name}}
       - name: Upload API Proxy Bundle
         id: upload
         run: "echo \"apigee-revision=$(curl --fail -X POST -H \"Content-Type: multipart/form-data\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" -F \"file=@proxy.zip\" \"https://apigee.googleapis.com/v1/organizations/${{secrets.APIGEE_ORG}}/apis?action=import&name=${{secrets.APIGEE_PROXY_NAME}}\" --silent | jq --raw-output .revision)\" >> $GITHUB_OUTPUT"
       - name: Deploy Revision
-        run: "curl \"https://apigee.googleapis.com/v1/organizations/${{ secrets.APIGEE_ORG }}/environments/$APIGEE_ENV/apis/${{secrets.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}/deployments?override=true\" -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
+        run: "curl \"https://apigee.googleapis.com/v1/organizations/${{ secrets.APIGEE_ORG }}/environments/${{env.APIGEE_ENV}}/apis/${{secrets.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}/deployments?override=true\" -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
 
