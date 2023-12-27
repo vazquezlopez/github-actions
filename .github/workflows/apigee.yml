@@ -38,6 +38,7 @@ jobs:
           activate_credentials_file: true
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_POOL_ID }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          id_token_audience: ${{ secrets.WORKLOAD_IDENTITY_POOL_ID }}
       - name: Create API bundle
         run: zip -r proxy.zip apiproxy
       - name: Set output
