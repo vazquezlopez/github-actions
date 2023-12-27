@@ -37,7 +37,7 @@ jobs:
           create_credentials_file: true
           id_token_audience: "projects/724341703540/locations/global/workloadIdentityPools/github/providers/my-provider-github"
           audience: "projects/724341703540/locations/global/workloadIdentityPools/github/providers/my-provider-github"
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_POOL_ID }}
+          workload_identity_provider: "projects/724341703540/locations/global/workloadIdentityPools/github/providers/my-provider-github"
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
       - name: Create API bundle
         run: zip -r proxy.zip apiproxy
