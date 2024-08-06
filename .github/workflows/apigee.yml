@@ -50,4 +50,8 @@ jobs:
       - name: Deploy Revision
         run: "curl \"https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/environments/${{vars.APIGEE_ENV}}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}/deployments?override=true\" -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
       - name: Check Revision
-        run: "sleep 10"
+        run: |
+          "sleep 10" 
+          "echo $apigee-revision
+          "curl \"https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/environments/${{vars.APIGEE_ENV}}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}} -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
+
