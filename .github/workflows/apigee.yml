@@ -55,4 +55,9 @@ jobs:
         run: |
           "echo $apigee-revision
           "curl \"https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/environments/${{vars.APIGEE_ENV}}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}} -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
-
+      - name: Loop
+        run: |
+          for i in 1 2 3 4 5
+          do
+            echo "Wait to check revision: $i"
+          done
