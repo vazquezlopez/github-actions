@@ -55,6 +55,8 @@ jobs:
         run: |
           for i in 1 2 3 4 5
           do
-            echo "Wait to check revision: $i"
+            echo "Revision of API Proxy ${{steps.upload.outputs.apigee-revision}}"
+            echo "Iterate to check revision: $i"
+            run: "deploy-status-get=$(curl \"https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
             sleep 10
           done
