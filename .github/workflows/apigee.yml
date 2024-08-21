@@ -57,6 +57,6 @@ jobs:
           do
             echo "Revision of API Proxy ${{steps.upload.outputs.apigee-revision}}"
             echo "Iterate to check revision: $i"
-            run: "echo \"deploy-status-get=$(curl \"https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
+            run: "echo \"deploy-status-get=$(curl \"https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\")"\"
             sleep 10
           done
