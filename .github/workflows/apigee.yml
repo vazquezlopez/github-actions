@@ -53,13 +53,19 @@ jobs:
         run: "curl \"https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/environments/${{ vars.APIGEE_ENV }}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}/deployments\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
       - name: Loop
         run: |
-          for i in 1 2
+          for i in 1 2 3 4 5
           do
             echo "Revision of API Proxy ${{steps.upload.outputs.apigee-revision}}"
             echo "Iterate to check revision: $i"
             response=$(curl -H "Authorization: Bearer ${{steps.auth.outputs.access_token}}" https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/environments/${{ vars.APIGEE_ENV }}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}/deployments --silent | jq --raw-output .state )
             echo $response
-            #state= $response | jq --raw-output .state
-            #echo \"deploy-revision=$(curl -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" \"https://apigee.googleapis.com/v1/organizations/${{vars.APIGEE_ORG}}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}\")\"            
-            sleep 5
+            if [ $response == 'PROGRESSING' ]; then
+              echo "Continue pulling"
+              sleep 10
+            elif [ $response == 'READY' ]; then
+              echo "The API Proxy is ready"
+              exit 0
+            else
+              echo "This is an unknown event"
+            fi
           done
