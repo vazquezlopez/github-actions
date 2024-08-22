@@ -48,17 +48,18 @@ jobs:
         id: upload
         run: "echo \"apigee-revision=$(curl --fail -X POST -H \"Content-Type: multipart/form-data\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" -F \"file=@proxy.zip\" \"https://apigee.googleapis.com/v1/organizations/${{vars.APIGEE_ORG}}/apis?action=import&name=${{vars.APIGEE_PROXY_NAME}}\" --silent | jq --raw-output .revision)\" >> $GITHUB_OUTPUT"
       - name: Deploy Revision
-        run: "curl \"https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/environments/${{vars.APIGEE_ENV}}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}/deployments?override=true\" -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
+        run: "curl \"https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/environments/${{vars.APIGEE_ENV}}/environments/${{ vars.APIGEE_ENV }}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}/deployments?override=true\" -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
       - name: Check Revision
         run: "curl \"https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\""
       - name: Loop
         run: |
-          for i in 1 2 3 4 5
+          for i in 1 2
           do
             echo "Revision of API Proxy ${{steps.upload.outputs.apigee-revision}}"
             echo "Iterate to check revision: $i"
-            response=$(curl -H "Authorization: Bearer ${{steps.auth.outputs.access_token}}" https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/environments/${{ vars.ENV }}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}/deployments )
+            response=$(curl -H "Authorization: Bearer ${{steps.auth.outputs.access_token}}" https://apigee.googleapis.com/v1/organizations/${{ vars.APIGEE_ORG }}/environments/${{ vars.APIGEE_ENV }}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}/deployments )
             echo $response
+            state= $response | jq --raw-output .state)
             #echo \"deploy-revision=$(curl -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" \"https://apigee.googleapis.com/v1/organizations/${{vars.APIGEE_ORG}}/apis/${{vars.APIGEE_PROXY_NAME}}/revisions/${{steps.upload.outputs.apigee-revision}}\")\"            
             sleep 5
           done
