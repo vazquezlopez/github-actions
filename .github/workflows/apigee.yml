@@ -38,9 +38,9 @@ jobs:
           echo "PROXY NAME: $APIGEE_PROXY_NAME"
           echo "variable from shell environment : $env_var"
         env:
-          APIGEE_ENV: ${{ vars.APIGEE_ENV }}
-          APIGEE_ORG: ${{ vars.APIGEE_ORG }}
-          APIGEE_PROXY_NAME: ${{ vars.APIGEE_PROXY_NAME }}
+          APIGEE_ENV: ${{ env.APIGEE_ENV }}
+          APIGEE_ORG: ${{ env.APIGEE_ORG }}
+          APIGEE_PROXY_NAME: ${{ env.APIGEE_PROXY_NAME }}
         
       - name: auth with Google
         id: auth
